@@ -28,24 +28,16 @@ class Jugador extends Modelo {
             this.ancho, this.alto, 8, 8);
         this.aCorriendoIzquierda = new Animacion(imagenes.jugador_corriendo_izquierda,
             this.ancho, this.alto, 8, 8, null);
-        this.aSaltandoDerecha = new Animacion(imagenes.jugador_saltando_derecha,
+        /*this.aSaltandoDerecha = new Animacion(imagenes.jugador_saltando_derecha,
             this.ancho, this.alto, 6, 4, null );
         this.aSaltandoIzquierda = new Animacion( imagenes.jugador_saltando_izquierda,
             this.ancho, this.alto, 6, 4, null);
-
+        */
         this.animacion = this.aIdleDerecha;
 
         // Disparo
         this.cadenciaDisparo = 1;
         this.tiempoDisparo = 0;
-    }
-
-
-    saltar(){
-        if ( !this.enElAire ) {
-            this.vy = -16;
-            this.enElAire = true;
-        }
     }
 
     disparar(){
@@ -81,25 +73,19 @@ class Jugador extends Modelo {
     }
 
     actualizar(){
+        /*
         if (this.enElAire && this.estado == estados.moviendo ){
             this.estado = estados.saltando;
         }
         if (!this.enElAire && this.estado == estados.saltando ){
             this.estado = estados.moviendo;
         }
-
+        */
         if (this.tiempoInvulnerable > 0 ){
             this.tiempoInvulnerable--;
         }
 
         this.animacion.actualizar();
-
-        // ¿Esta en el aire?
-        if (this.choqueAbajo == true){
-            this.enElAire = false;
-        } else {
-            this.enElAire = true;
-        }
 
         // Establecer orientación
         if ( this.vx > 0 ){
@@ -111,14 +97,14 @@ class Jugador extends Modelo {
 
         // Selección de animación
        switch (this.estado){
-           case estados.saltando:
+           /*case estados.saltando:
                if (this.orientacion == orientaciones.derecha){
                    this.animacion = this.aSaltandoDerecha;
                }
                if (this.orientacion == orientaciones.izquierda){
                    this.animacion = this.aSaltandoIzquierda;
                }
-               break;
+               break;*/
            case estados.disparando:
                if (this.orientacion == orientaciones.derecha) {
                    this.animacion = this.aDispararDerecha;
