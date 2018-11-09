@@ -289,7 +289,7 @@ class GameLayer extends Layer {
     cargarObjetoMapa(simbolo, x, y){
         switch(simbolo) {
             case ".":
-                var bloque = new Bloque(imagenes.bloque_fondo_muro, x,y);
+                var bloque = new Bloque(imagenes.hierba, x,y);
                 bloque.y = bloque.y - bloque.alto/2;
                 // modificación para empezar a contar desde el suelo
                 this.bloques.push(bloque);
@@ -301,7 +301,7 @@ class GameLayer extends Layer {
 
                 this.puntos = new Texto(this.castillo.vida,480*0.9,320*0.07 );
 
-                var bloque = new Bloque(imagenes.bloque_fondo_muro, x,y);
+                var bloque = new Bloque(imagenes.hierba, x,y);
                 bloque.y = bloque.y - bloque.alto/2;
                 this.bloques.push(bloque);
 
@@ -312,7 +312,7 @@ class GameLayer extends Layer {
                 this.enemigos.push(enemigo);
                 this.espacio.agregarCuerpoDinamico(enemigo);
 
-                var bloque = new Bloque(imagenes.bloque_fondo_muro, x,y);
+                var bloque = new Bloque(imagenes.hierba, x,y);
                 bloque.y = bloque.y - bloque.alto/2;
                 this.bloques.push(bloque);
                 break;
@@ -321,7 +321,7 @@ class GameLayer extends Layer {
                 this.jugador.y = this.jugador.y - this.jugador.alto/2;
                 this.espacio.agregarCuerpoDinamico(this.jugador);
 
-                var bloque = new Bloque(imagenes.bloque_fondo_muro, x,y);
+                var bloque = new Bloque(imagenes.hierba, x,y);
                 bloque.y = bloque.y - bloque.alto/2;
                 this.bloques.push(bloque);
                 break;
@@ -330,7 +330,7 @@ class GameLayer extends Layer {
                 this.generador.y = this.generador.y - this.generador.alto/2;
                 this.espacio.agregarCuerpoEstatico(this.generador);
 
-                var bloque = new Bloque(imagenes.bloque_fondo_muro, x,y);
+                var bloque = new Bloque(imagenes.hierba, x,y);
                 bloque.y = bloque.y - bloque.alto/2;
                 this.bloques.push(bloque);
                 break;

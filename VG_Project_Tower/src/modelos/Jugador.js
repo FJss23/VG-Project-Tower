@@ -1,7 +1,7 @@
 class Jugador extends Modelo {
 
     constructor(x, y) {
-        super(imagenes.jugador , x, y)
+        super(imagenes.guerrero_quieto_der, x, y)
         this.vidas = 3;
         this.tiempoInvulnerable = 0;
 
@@ -11,23 +11,23 @@ class Jugador extends Modelo {
         this.vy = 0; // velocidadY
 
         // Animaciones
-        this.aDispararDerecha = new Animacion(imagenes.jugador_disparando_derecha,
-            this.ancho, this.alto, 6, 4, this.finAnimacionDisparar.bind(this) );
+        this.aDispararDerecha = new Animacion(imagenes.guerrero_atacar_der,
+            this.ancho, this.alto, 6, 3, this.finAnimacionDisparar.bind(this) );
         // No pasar funciones del DIRECTAMNTE COMO callback
         // El objeto que ejecute la función no sabrá interpretar el "this."
 
-        this.aDispararIzquierda = new Animacion(imagenes.jugador_disparando_izquierda,
-            this.ancho, this.alto, 6, 4, this.finAnimacionDisparar.bind(this));
+        this.aDispararIzquierda = new Animacion(imagenes.guerrero_atacar_izq,
+            this.ancho, this.alto, 6, 3, this.finAnimacionDisparar.bind(this));
 
-        this.aIdleDerecha = new Animacion(imagenes.jugador_idle_derecha,
-            this.ancho, this.alto, 6, 8);
-        this.aIdleIzquierda = new Animacion(imagenes.jugador_idle_izquierda,
-            this.ancho, this.alto, 6, 8);
+        this.aIdleDerecha = new Animacion(imagenes.guerrero_quieto_der,
+            this.ancho, this.alto, 6, 1);
+        this.aIdleIzquierda = new Animacion(imagenes.guerrero_quieto_izq,
+            this.ancho, this.alto, 6, 1);
         this.aCorriendoDerecha =
-            new Animacion(imagenes.jugador_corriendo_derecha,
-            this.ancho, this.alto, 8, 8);
-        this.aCorriendoIzquierda = new Animacion(imagenes.jugador_corriendo_izquierda,
-            this.ancho, this.alto, 8, 8, null);
+            new Animacion(imagenes.guerrero_correr_der,
+            this.ancho, this.alto, 8, 5);
+        this.aCorriendoIzquierda = new Animacion(imagenes.guerrero_correr_izq,
+            this.ancho, this.alto, 8, 5, null);
         /*this.aSaltandoDerecha = new Animacion(imagenes.jugador_saltando_derecha,
             this.ancho, this.alto, 6, 4, null );
         this.aSaltandoIzquierda = new Animacion( imagenes.jugador_saltando_izquierda,
