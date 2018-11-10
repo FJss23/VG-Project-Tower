@@ -11,23 +11,23 @@ class Jugador extends Modelo {
         this.vy = 0; // velocidadY
 
         // Animaciones
-        this.aDispararDerecha = new Animacion(imagenes.guerrero_atacar_der,
-            this.ancho, this.alto, 6, 3, this.finAnimacionDisparar.bind(this) );
+        this.aDispararDerecha = new Animacion(imagenes.ataque_derecha,
+            this.ancho, this.alto, 10, 5, this.finAnimacionDisparar.bind(this) );
         // No pasar funciones del DIRECTAMNTE COMO callback
         // El objeto que ejecute la función no sabrá interpretar el "this."
 
-        this.aDispararIzquierda = new Animacion(imagenes.guerrero_atacar_izq,
-            this.ancho, this.alto, 6, 3, this.finAnimacionDisparar.bind(this));
+        this.aDispararIzquierda = new Animacion(imagenes.ataque_izquierda,
+            this.ancho, this.alto, 10, 5, this.finAnimacionDisparar.bind(this));
 
-        this.aIdleDerecha = new Animacion(imagenes.guerrero_quieto_der,
-            this.ancho, this.alto, 6, 1);
-        this.aIdleIzquierda = new Animacion(imagenes.guerrero_quieto_izq,
-            this.ancho, this.alto, 6, 1);
+        this.aIdleDerecha = new Animacion(imagenes.idle_derecha,
+            this.ancho, this.alto, 10, 8);
+        this.aIdleIzquierda = new Animacion(imagenes.idle_izquierda,
+            this.ancho, this.alto, 10, 8);
         this.aCorriendoDerecha =
-            new Animacion(imagenes.guerrero_correr_der,
-            this.ancho, this.alto, 8, 5);
-        this.aCorriendoIzquierda = new Animacion(imagenes.guerrero_correr_izq,
-            this.ancho, this.alto, 8, 5, null);
+            new Animacion(imagenes.caminar_derecha,
+            this.ancho, this.alto, 10, 8);
+        this.aCorriendoIzquierda = new Animacion(imagenes.caminar_izquierda,
+            this.ancho, this.alto, 10, 8, null);
         /*this.aSaltandoDerecha = new Animacion(imagenes.jugador_saltando_derecha,
             this.ancho, this.alto, 6, 4, null );
         this.aSaltandoIzquierda = new Animacion( imagenes.jugador_saltando_izquierda,
