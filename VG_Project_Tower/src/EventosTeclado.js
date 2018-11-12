@@ -11,7 +11,7 @@ function onKeyDown( event) {
         teclas.push(event.keyCode);
         switch ( event.keyCode ){
             case 32:
-                controles.disparo = true;
+                controles.espada = true;
                 controles.continuar = true;
                 break;
             case 38:
@@ -34,32 +34,34 @@ function onKeyUp( event) {
     // sacar la tecla pulsada
     var posicion = teclas.indexOf(event.keyCode);
     teclas.splice( posicion, 1);
-    console.log("Tecla levantada");
+    //console.log("Tecla levantada");
 
     switch ( event.keyCode ){
         case 32:
-            controles.disparo = false;
+            controles.espado = false;
             controles.continuar = false;
             break;
         case 38:
             if ( controles.moverY == 1 ){
+                //console.log("Cambiar moverY = 0")
                 controles.moverY = 0;
             }
             break;
         case 40:
             if ( controles.moverY == -1 ){
+                //console.log("Cambiar moverY = 0")
                 controles.moverY = 0;
             }
             break;
         case 39:
             if ( controles.moverX == 1 ){
-                console.log("Cambiar moverX = 0")
+                //console.log("Cambiar moverX = 0")
                 controles.moverX = 0;
             }
             break;
         case 37:
             if ( controles.moverX == -1 ){
-                console.log("Cambiar moverX = 0")
+                //console.log("Cambiar moverX = 0")
                 controles.moverX = 0;
             }
             break;

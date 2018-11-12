@@ -11,20 +11,22 @@ class GameLayer extends Layer {
         //reproducirMusica();
 
         //this.botonSalto = new Boton(imagenes.boton_salto,480*0.9,320*0.55);
-        this.botonDisparo = new Boton(imagenes.boton_disparo,480*0.75,320*0.83);
+        this.botonEspada = new Boton(imagenes.boton_disparo,480*0.75,320*0.83);
         this.pad = new Pad(480*0.14,320*0.8);
         this.espacio = new Espacio(0);
 
         this.scrollX = 0;
         this.bloques = [];
-        this.fondoPuntos =
-            new Fondo(imagenes.icono_puntos, 480*0.85,320*0.05);
+       /* this.fondoPuntos =
+            new Fondo(imagenes.icono_puntos, 480*0.85,320*0.05);*/
 
         this.jugador = new Jugador(50, 50);
         //this.fondo = new Fondo(imagenes.fondo_2,480*0.5,320*0.5);
 
-        this.disparosJugador = []
+        //this.disparosJugador = []
 
+        this.generadores = [];
+        this.aliados = [];
         this.enemigos = [];
 
         this.cargarMapa("res/"+nivelActual+".txt");
@@ -53,50 +55,59 @@ class GameLayer extends Layer {
         }
         */
         this.espacio.actualizar();
-        //this.fondo.vx = -1;
-        //this.fondo.actualizar();
         this.jugador.actualizar();
 
-        // Eliminar disparos sin velocidad
-        for (var i=0; i < this.disparosJugador.length; i++){
-            if ( this.disparosJugador[i] != null &&
-                    this.disparosJugador[i].vx == 0){
+        for(var i = 0; i < this.generadores.length; i++){
+            this.generadores[i].actualizar();
 
-                this.espacio
-                    .eliminarCuerpoDinamico(this.disparosJugador[i]);
-                this.disparosJugador.splice(i, 1);
+            var aliado = this.generadores[i].generarAliado();
+            if(aliado != null){
+                this.aliados.push(aliado);
+                this.espacio.agregarCuerpoDinamico(aliado);
+            }
+            var enemigo = this.generadores[i].generarEnemigo();
+            if(enemigo != null){
+                this.enemigos.push(enemigo);
+                this.espacio.agregarCuerpoDinamico(enemigo);
             }
         }
 
         // Eliminar disparos fuera de pantalla
-        for (var i=0; i < this.disparosJugador.length; i++){
-            if ( this.disparosJugador[i] != null &&
-                !this.disparosJugador[i].estaEnPantalla() ||
-                    this.disparosJugador[i].vx == 0){
-                this.espacio
-                    .eliminarCuerpoDinamico(this.disparosJugador[i]);
-                this.disparosJugador.splice(i, 1);
+        /*for (var i=0; i < this.disparosJugador.length; i++) {
+            for (var j = 0; j < this.bloques.length; j++) {
+                if (this.disparosJugador[i] != null) {
+
+                    if (!this.disparosJugador[i].estaEnPantalla() ||
+                        (this.disparosJugador[i].vx == 0 && this.disparosJugador[i].vy == 0)
+                        || (this.disparosJugador[i].colisiona(this.bloques[j]) &&
+                            !this.bloques[j].fondo)) {
+
+                        this.espacio
+                            .eliminarCuerpoDinamico(this.disparosJugador[i]);
+                        this.disparosJugador.splice(i, 1);
+                    }
+                }
             }
-        }
+        }*/
 
         for (var i=0; i < this.enemigos.length; i++){
             this.enemigos[i].actualizar();
         }
-        for (var i=0; i < this.disparosJugador.length; i++) {
+        /*for (var i=0; i < this.disparosJugador.length; i++) {
             this.disparosJugador[i].actualizar();
-        }
+        }*/
 
         // colisiones
-        for (var i=0; i < this.enemigos.length; i++){
+        /*for (var i=0; i < this.enemigos.length; i++){
             if ( this.jugador.colisiona(this.enemigos[i])){
                 this.jugador.golpeado();
                 if (this.jugador.vidas <= 0){
                     this.iniciar();
                 }
             }
-        }
+        }*/
         // colisiones , disparoJugador - Enemigo
-        for (var i=0; i < this.disparosJugador.length; i++){
+        /*for (var i=0; i < this.disparosJugador.length; i++){
             for (var j=0; j < this.enemigos.length; j++){
 
                 if (this.disparosJugador[i] != null &&
@@ -107,12 +118,12 @@ class GameLayer extends Layer {
                             .eliminarCuerpoDinamico(this.disparosJugador[i]);
                         this.disparosJugador.splice(i, 1);
                         this.enemigos[j].impactado();
-                        this.puntos.valor++;
+                        //this.puntos.valor++;
 
                 }
             }
-        }
-
+        }*/
+        /*
         // Enemigos muertos fuera del juego
         for (var j=0; j < this.enemigos.length; j++){
             if ( this.enemigos[j] != null &&
@@ -123,10 +134,9 @@ class GameLayer extends Layer {
                 this.enemigos.splice(j, 1);
 
             }
-        }
+        }*/
 
     }
-
 
     calcularScroll(){
         // limite izquierda
@@ -150,19 +160,24 @@ class GameLayer extends Layer {
         for (var i=0; i < this.bloques.length; i++){
             this.bloques[i].dibujar(this.scrollX);
         }
-        for (var i=0; i < this.disparosJugador.length; i++) {
+        /*for (var i=0; i < this.disparosJugador.length; i++) {
             this.disparosJugador[i].dibujar(this.scrollX);
-        }
+        }*/
         this.jugador.dibujar(this.scrollX);
+        this.torre.dibujar(this.scrollX);
+        for(var i = 0; i < this.generadores.length; i++){
+            this.generadores[i].dibujar(this.scrollX);
+        }
         for (var i=0; i < this.enemigos.length; i++){
             this.enemigos[i].dibujar(this.scrollX);
         }
-        this.castillo.dibujar(this.scrollX);
-        this.generador.dibujar(this.scrollX);
-        this.fondoPuntos.dibujar();
-        this.puntos.dibujar();
+        for (var i=0; i < this.aliados.length; i++){
+            this.aliados[i].dibujar(this.scrollX);
+        }
+        //his.fondoPuntos.dibujar();
+        //this.puntos.dibujar();
         if ( !this.pausa && entrada == entradas.pulsaciones) {
-            this.botonDisparo.dibujar();
+            this.botonEspada.dibujar();
             //this.botonSalto.dibujar();
             this.pad.dibujar();
         }
@@ -173,7 +188,7 @@ class GameLayer extends Layer {
 
     calcularPulsaciones(pulsaciones){
         // Suponemos botones no estan pulsados
-        this.botonDisparo.pulsado = false;
+        this.botonEspada.pulsado = false;
         //this.botonSalto.pulsado = false;
         // suponemos que el pad esta en el centro
         controles.moverX = 0;
@@ -188,18 +203,25 @@ class GameLayer extends Layer {
 
             if (this.pad.contienePunto(pulsaciones[i].x , pulsaciones[i].y) ){
                 var orientacionX = this.pad.obtenerOrientacionX(pulsaciones[i].x);
+                var orientacionY = this.pad.obtenerOrientacionY(pulsaciones[i].y);
                 if ( orientacionX > 20) { // de 0 a 20 no contabilizamos
                     controles.moverX = orientacionX;
                 }
                 if ( orientacionX < -20) { // de -20 a 0 no contabilizamos
                     controles.moverX = orientacionX;
                 }
+                if ( orientacionY > 20) { // de 0 a 20 no contabilizamos
+                    controles.moverY = orientacionY;
+                }
+                if ( orientacionY < -20) { // de -20 a 0 no contabilizamos
+                    controles.moverY = orientacionY;
+                }
             }
 
-            if (this.botonDisparo.contienePunto(pulsaciones[i].x , pulsaciones[i].y) ){
-                this.botonDisparo.pulsado = true;
+            if (this.botonEspada.contienePunto(pulsaciones[i].x , pulsaciones[i].y) ){
+                this.botonEspada.pulsado = true;
                 if ( pulsaciones[i].tipo == tipoPulsacion.inicio) {
-                    controles.disparo = true;
+                    controles.espada = true;
                 }
             }
             /*
@@ -213,8 +235,8 @@ class GameLayer extends Layer {
         }
 
         // No pulsado - Boton Disparo
-        if ( !this.botonDisparo.pulsado ){
-            controles.disparo = false;
+        if ( !this.botonEspada.pulsado ){
+            controles.espada = false;
         }
 
         // No pulsado - Boton Salto
@@ -229,14 +251,15 @@ class GameLayer extends Layer {
             controles.continuar = false;
             this.pausa = false;
         }
-        // disparar
-        if (  controles.disparo ){
-            var nuevoDisparo = this.jugador.disparar();
-            if ( nuevoDisparo != null ) {
+
+        if (  controles.espada ){
+            //var nuevoDisparo =
+            this.jugador.ataqueEspada();
+            /*if ( nuevoDisparo != null ) {
                 this.espacio.agregarCuerpoDinamico(nuevoDisparo);
                 this.disparosJugador.push(nuevoDisparo);
-            }
-            controles.disparo = false;
+            }*/
+            controles.espada = false;
         }
 
         // Eje X
@@ -289,53 +312,44 @@ class GameLayer extends Layer {
     cargarObjetoMapa(simbolo, x, y){
         switch(simbolo) {
             case ".":
-                var bloque = new Bloque(imagenes.hierba, x,y);
+                var bloque = new Bloque(imagenes.hierba, x,y, true);
                 bloque.y = bloque.y - bloque.alto/2;
                 // modificación para empezar a contar desde el suelo
                 this.bloques.push(bloque);
                 break;
             case "C":
-                this.castillo = new Castillo(x,y);
-                this.castillo.y = this.castillo.y - this.castillo.alto/2;
-                this.espacio.agregarCuerpoEstatico(this.castillo);
+                this.torre = new Torre(x,y);
+                this.torre.y = this.torre.y - this.torre.alto/2;
+                this.espacio.agregarCuerpoEstatico(this.torre);
 
-                this.puntos = new Texto(this.castillo.vida,480*0.9,320*0.07 );
+                //this.puntos = new Texto(this.castillo.vida,480*0.9,320*0.07 );
 
-                var bloque = new Bloque(imagenes.hierba, x,y);
+                var bloque = new Bloque(imagenes.hierba, x,y, true);
                 bloque.y = bloque.y - bloque.alto/2;
                 this.bloques.push(bloque);
 
-                break;
-            case "E":
-                var enemigo = new Enemigo(x,y);
-                enemigo.y = enemigo.y - enemigo.alto/2;
-                this.enemigos.push(enemigo);
-                this.espacio.agregarCuerpoDinamico(enemigo);
-
-                var bloque = new Bloque(imagenes.hierba, x,y);
-                bloque.y = bloque.y - bloque.alto/2;
-                this.bloques.push(bloque);
                 break;
             case "1":
                 this.jugador = new Jugador(x, y);
                 this.jugador.y = this.jugador.y - this.jugador.alto/2;
                 this.espacio.agregarCuerpoDinamico(this.jugador);
 
-                var bloque = new Bloque(imagenes.hierba, x,y);
+                var bloque = new Bloque(imagenes.hierba, x,y, true);
                 bloque.y = bloque.y - bloque.alto/2;
                 this.bloques.push(bloque);
                 break;
-            case "G":
-                this.generador = new GeneradorEnemigos(x, y);
-                this.generador.y = this.generador.y - this.generador.alto/2;
-                this.espacio.agregarCuerpoEstatico(this.generador);
+            case "2":
+                var generador = new GeneradorNPC(imagenes.salida_izquierda,x, y);
+                generador.y = generador.y - generador.alto/2;
+                this.espacio.agregarCuerpoEstatico(generador);
+                this.generadores.push(generador);
 
-                var bloque = new Bloque(imagenes.hierba, x,y);
+                var bloque = new Bloque(imagenes.bloque_tierra, x,y, false);
                 bloque.y = bloque.y - bloque.alto/2;
                 this.bloques.push(bloque);
                 break;
             case "#":
-                var bloque = new Bloque(imagenes.bloque_tierra, x,y);
+                var bloque = new Bloque(imagenes.bloque_tierra, x,y, false);
                 bloque.y = bloque.y - bloque.alto/2;
                 this.bloques.push(bloque);
                 this.espacio.agregarCuerpoEstatico(bloque);

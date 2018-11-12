@@ -1,7 +1,7 @@
-class Castillo extends Modelo {
+class Torre extends Modelo {
 
     constructor(x, y){
-        super(imagenes.copa, x,y);
+        super(imagenes.torre, x,y);
         this.vida = 4;
     }
 
