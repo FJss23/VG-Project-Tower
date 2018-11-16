@@ -1,6 +1,6 @@
 class Enemigo extends Modelo {
 
-    constructor(x, y) {
+    constructor(x, y, vx, vy) {
         super(imagenes.enemigo, x, y)
         /*this.estado = estados.moviendo;
         this.vxInteligencia = -1;
@@ -14,8 +14,8 @@ class Enemigo extends Modelo {
         // Ref a la animación actual
         this.animacion = this.aMover;
 
-        this.vy = 0;
-        this.vx = 1;
+        this.vy = vy;
+        this.vx = vx;
     }
 
     finAnimacionMorir(){

@@ -5,6 +5,8 @@ class Jugador extends Modelo {
         this.vidas = 3;
         this.tiempoInvulnerable = 0;
 
+        this.ratioEspada = 0.10;
+
         this.estado = estados.moviendo;
         this.orientacion = orientaciones.derecha;
         this.vx = 0; // velocidadX
@@ -12,13 +14,13 @@ class Jugador extends Modelo {
 
         // Animaciones
         this.aAtacandoDerecha = new Animacion(imagenes.ataque_derecha,
-            85, 85, 2, 5, this.finAnimacionDisparar.bind(this) );
+            85, 85, 1, 5, this.finAnimacionDisparar.bind(this) );
         this.aAtacandoIzquierda = new Animacion(imagenes.ataque_izquierda,
-            85, 85, 2, 5, this.finAnimacionDisparar.bind(this));
+            85, 85, 1, 5, this.finAnimacionDisparar.bind(this));
         this.aAtacandoArriba = new Animacion(imagenes.ataque_arriba,
-            85, 85, 2, 5, this.finAnimacionDisparar.bind(this));
+            85, 85, 1, 5, this.finAnimacionDisparar.bind(this));
         this.aAtacandoAbajo = new Animacion(imagenes.ataque_abajo,
-            80, 85, 2, 5, this.finAnimacionDisparar.bind(this));
+            80, 85, 1, 5, this.finAnimacionDisparar.bind(this));
 
         this.aIdleDerecha = new Animacion(imagenes.idle_derecha,
             50, 50, 3, 8);
@@ -172,5 +174,68 @@ class Jugador extends Modelo {
         this.vy = direccion * 3;
     }
 
+    comprobarAtaqueEspada(modelo){
+        var colisiona = false;
+        if(this.estado == estados.atacandoEspada) {
+            /*obtengo las dimensiones de un rectangulo mas pequeño dentro
+                del propio jugador, y comprueba si colisiona con el modelo*/
+            if (this.orientacion == orientaciones.derecha) {
+                var xEspada = this.x + this.aAtacandoDerecha.modeloAncho * (0.5 - this.ratioEspada / 2);
+                var yEspada = this.y;
+                var espadaAncho = this.aAtacandoDerecha.modeloAncho * this.ratioEspada;
+                var espadaAlto = this.aAtacandoDerecha.modeloAlto;
+                if (modelo.x - modelo.ancho / 2 <= xEspada + espadaAncho / 2
+                    && modelo.x + modelo.ancho / 2 >= xEspada - espadaAncho / 2
+                    && yEspada + espadaAlto / 2 >= modelo.y - modelo.alto / 2
+                    && yEspada - espadaAlto / 2 <= modelo.y + modelo.alto / 2) {
 
+                    colisiona = true;
+
+                }
+            }
+            if (this.orientacion == orientaciones.izquierda) {
+                var xEspada = this.x - this.aAtacandoIzquierda.modeloAncho * (0.5 - this.ratioEspada / 2);
+                var yEspada = this.y;
+                var espadaAncho = this.aAtacandoIzquierda.modeloAncho * this.ratioEspada;
+                var espadaAlto = this.aAtacandoIzquierda.modeloAlto;
+                if (modelo.x - modelo.ancho / 2 <= xEspada + espadaAncho / 2
+                    && modelo.x + modelo.ancho / 2 >= xEspada - espadaAncho / 2
+                    && yEspada + espadaAlto / 2 >= modelo.y - modelo.alto / 2
+                    && yEspada - espadaAlto / 2 <= modelo.y + modelo.alto / 2) {
+
+                    colisiona = true;
+
+                }
+            }
+            if (this.orientacion == orientaciones.abajo) {
+                var xEspada = this.x;
+                var yEspada = this.y + this.aAtacandoAbajo.modeloAlto * (0.5 - this.ratioEspada / 2);
+                var espadaAncho = this.aAtacandoAbajo.modeloAncho;
+                var espadaAlto = this.aAtacandoAbajo.modeloAlto * this.ratioEspada;
+                if (modelo.x - modelo.ancho / 2 <= xEspada + espadaAncho / 2
+                    && modelo.x + modelo.ancho / 2 >= xEspada - espadaAncho / 2
+                    && yEspada + espadaAlto / 2 >= modelo.y - modelo.alto / 2
+                    && yEspada - espadaAlto / 2 <= modelo.y + modelo.alto / 2) {
+
+                    colisiona = true;
+
+                }
+            }
+            if (this.orientacion == orientaciones.arriba) {
+                var xEspada = this.x;
+                var yEspada = this.y - this.aAtacandoArriba.modeloAlto * (0.5 - this.ratioEspada / 2);
+                var espadaAncho = this.aAtacandoArriba.modeloAncho;
+                var espadaAlto = this.aAtacandoArriba.modeloAlto * this.ratioEspada;
+                if (modelo.x - modelo.ancho / 2 <= xEspada + espadaAncho / 2
+                    && modelo.x + modelo.ancho / 2 >= xEspada - espadaAncho / 2
+                    && yEspada + espadaAlto / 2 >= modelo.y - modelo.alto / 2
+                    && yEspada - espadaAlto / 2 <= modelo.y + modelo.alto / 2) {
+
+                    colisiona = true;
+
+                }
+            }
+        }
+        return colisiona;
+    }
 }

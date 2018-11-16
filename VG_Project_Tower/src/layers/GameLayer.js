@@ -5,6 +5,7 @@ class GameLayer extends Layer {
         this.mensaje = new Boton(imagenes.mensaje_como_jugar, 480/2, 320/2);
         this.pausa = true;
         this.iniciar();
+
     }
 
     iniciar() {
@@ -136,6 +137,24 @@ class GameLayer extends Layer {
             }
         }*/
 
+        // Comprobar colision de la espada con el enemigo
+        for(var i = 0; i < this.enemigos.length; i++){
+            if(this.enemigos[i] != null){
+                if(this.jugador.comprobarAtaqueEspada(this.enemigos[i])){
+                    this.espacio.eliminarCuerpoDinamico(this.enemigos[i]);
+                    this.enemigos.splice(i, 1);
+                }
+            }
+        }
+
+        // Comprobar colision de la espada con el enemigo
+        for(var i = 0; i < this.aliados.length; i++){
+            if(this.aliados[i] != null){
+                if(this.jugador.comprobarAtaqueEspada(this.aliados[i])){
+                    this.iniciar();
+                }
+            }
+        }
     }
 
     calcularScroll(){
@@ -339,7 +358,37 @@ class GameLayer extends Layer {
                 this.bloques.push(bloque);
                 break;
             case "2":
-                var generador = new GeneradorNPC(imagenes.salida_izquierda,x, y);
+                var generador = new GeneradorNPC(imagenes.salida_izquierda,x, y, 1, 0);
+                generador.y = generador.y - generador.alto/2;
+                this.espacio.agregarCuerpoEstatico(generador);
+                this.generadores.push(generador);
+
+                var bloque = new Bloque(imagenes.bloque_tierra, x,y, false);
+                bloque.y = bloque.y - bloque.alto/2;
+                this.bloques.push(bloque);
+                break;
+            case "3":
+                var generador = new GeneradorNPC(imagenes.salida_arriba,x, y, 0, 1);
+                generador.y = generador.y - generador.alto/2;
+                this.espacio.agregarCuerpoEstatico(generador);
+                this.generadores.push(generador);
+
+                var bloque = new Bloque(imagenes.bloque_tierra, x,y, false);
+                bloque.y = bloque.y - bloque.alto/2;
+                this.bloques.push(bloque);
+                break;
+            case "4":
+                var generador = new GeneradorNPC(imagenes.salida_derecha,x, y, -1, 0);
+                generador.y = generador.y - generador.alto/2;
+                this.espacio.agregarCuerpoEstatico(generador);
+                this.generadores.push(generador);
+
+                var bloque = new Bloque(imagenes.bloque_tierra, x,y, false);
+                bloque.y = bloque.y - bloque.alto/2;
+                this.bloques.push(bloque);
+                break;
+            case "5":
+                var generador = new GeneradorNPC(imagenes.salida_abajo, x, y, 0, -1);
                 generador.y = generador.y - generador.alto/2;
                 this.espacio.agregarCuerpoEstatico(generador);
                 this.generadores.push(generador);

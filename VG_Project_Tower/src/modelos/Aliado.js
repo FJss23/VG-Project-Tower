@@ -1,6 +1,6 @@
 class Aliado extends Modelo {
 
-    constructor(x,y){
+    constructor(x, y, vx, vy){
         super(imagenes.aliado, x, y);
 
         this.aMover = new Animacion(imagenes.aliado,
@@ -8,8 +8,8 @@ class Aliado extends Modelo {
 
         this.animacion = this.aMover;
 
-        this.vx = 1;
-        this.vy = 0;
+        this.vx = vx;
+        this.vy = vy;
     }
 
     actualizar(){
