@@ -3,8 +3,23 @@ class Aliado extends Modelo {
     constructor(x, y, vx, vy){
         super(imagenes.aliado, x, y);
 
-        this.aMover = new Animacion(imagenes.aliado,
-            this.ancho, this.alto, 6, 1);
+        var img;
+
+        if(vx > 0){
+            img = imagenes.aliado_mover_derecha;
+        }
+        else if(vx < 0){
+            img = imagenes.aliado_mover_izquierda;
+        }
+        else if(vy > 0){
+            img = imagenes.aliado_mover_abajo;
+        }
+        else {
+            img = imagenes.aliado_mover_arriba;
+        }
+
+        this.aMover = new Animacion(img,
+            this.ancho, this.alto, 4, 4);
 
         this.animacion = this.aMover;
 

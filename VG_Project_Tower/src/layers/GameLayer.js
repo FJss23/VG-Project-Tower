@@ -18,8 +18,12 @@ class GameLayer extends Layer {
 
         this.scrollX = 0;
         this.bloques = [];
-       /* this.fondoPuntos =
-            new Fondo(imagenes.icono_puntos, 480*0.85,320*0.05);*/
+
+        this.numRecolectables = new Texto(0,480*0.785,320*0.09);
+        this.fondoTorre =
+            new Fondo(imagenes.vida_torre, 480*0.85,320*0.07 );
+        this.fondoRecolectable =
+            new Fondo(imagenes.recolectable_jugador_img, 480*0.75,320*0.07);
 
         this.jugador = new Jugador(50, 50);
         //this.fondo = new Fondo(imagenes.fondo_2,480*0.5,320*0.5);
@@ -29,6 +33,7 @@ class GameLayer extends Layer {
         this.generadores = [];
         this.aliados = [];
         this.enemigos = [];
+        this.recolectables = [];
 
         this.cargarMapa("res/"+nivelActual+".txt");
     }
@@ -58,6 +63,10 @@ class GameLayer extends Layer {
         this.espacio.actualizar();
         this.jugador.actualizar();
 
+        for(var i = 0; i < this.recolectables.length; i++){
+            this.recolectables[i].actualizar();
+        }
+
         for(var i = 0; i < this.generadores.length; i++){
             this.generadores[i].actualizar();
 
@@ -71,6 +80,25 @@ class GameLayer extends Layer {
                 this.enemigos.push(enemigo);
                 this.espacio.agregarCuerpoDinamico(enemigo);
             }
+        }
+
+        for(var i = 0; i < this.aliados.length; i++){
+            if(this.aliados[i] != null && this.torre.colisiona(this.aliados[i])){
+                this.espacio.eliminarCuerpoDinamico(this.aliados[i]);
+                this.aliados.splice(i, 1);
+            }
+        }
+
+        for(var i = 0; i < this.enemigos.length; i++){
+            if(this.enemigos[i] != null &&
+            this.enemigos[i].colisiona(this.torre)){
+
+                this.enemigos[i].impactado();
+            }
+        }
+
+        for (var i=0; i < this.enemigos.length; i++){
+            this.enemigos[i].actualizar();
         }
 
         // Eliminar disparos fuera de pantalla
@@ -91,8 +119,19 @@ class GameLayer extends Layer {
             }
         }*/
 
-        for (var i=0; i < this.enemigos.length; i++){
-            this.enemigos[i].actualizar();
+
+
+        for(var i = 0; i < this.enemigos.length; i++){
+            if(this.enemigos[i] != null &&
+                this.enemigos[i].estado == estados.muerto){
+                console.log("explosion");
+                this.espacio.eliminarCuerpoDinamico(this.enemigos[i]);
+                this.enemigos.splice(i, 1);
+                this.puntos.valor--;
+                if(this.puntos.valor == 0){
+                    this.iniciar();
+                }
+            }
         }
         /*for (var i=0; i < this.disparosJugador.length; i++) {
             this.disparosJugador[i].actualizar();
@@ -141,6 +180,11 @@ class GameLayer extends Layer {
         for(var i = 0; i < this.enemigos.length; i++){
             if(this.enemigos[i] != null){
                 if(this.jugador.comprobarAtaqueEspada(this.enemigos[i])){
+                    var recolectable = this.enemigos[i].enemigoConRecolectable();
+                    if(recolectable != null){
+                        this.recolectables.push(recolectable);
+                        this.espacio.agregarCuerpoDinamico(recolectable);
+                    }
                     this.espacio.eliminarCuerpoDinamico(this.enemigos[i]);
                     this.enemigos.splice(i, 1);
                 }
@@ -152,6 +196,18 @@ class GameLayer extends Layer {
             if(this.aliados[i] != null){
                 if(this.jugador.comprobarAtaqueEspada(this.aliados[i])){
                     this.iniciar();
+                }
+            }
+        }
+
+        for(var i = 0; i < this.recolectables.length; i++){
+            if(this.recolectables[i] != null){
+                if(this.jugador.colisiona(this.recolectables[i])){
+                    this.espacio.eliminarCuerpoDinamico(this.recolectables[i]);
+                    this.recolectables.splice(i,1);
+                    if(this.numRecolectables < 5){
+                        this.numRecolectables.valor++;
+                    }
                 }
             }
         }
@@ -193,8 +249,15 @@ class GameLayer extends Layer {
         for (var i=0; i < this.aliados.length; i++){
             this.aliados[i].dibujar(this.scrollX);
         }
+        for(var i = 0; i < this.recolectables.length; i++){
+            this.recolectables[i].dibujar(this.scrollX);
+        }
         //his.fondoPuntos.dibujar();
-        //this.puntos.dibujar();
+        this.fondoRecolectable.dibujar();
+        this.fondoTorre.dibujar();
+        this.puntos.dibujar();
+        this.numRecolectables.dibujar();
+
         if ( !this.pausa && entrada == entradas.pulsaciones) {
             this.botonEspada.dibujar();
             //this.botonSalto.dibujar();
@@ -341,7 +404,7 @@ class GameLayer extends Layer {
                 this.torre.y = this.torre.y - this.torre.alto/2;
                 this.espacio.agregarCuerpoEstatico(this.torre);
 
-                //this.puntos = new Texto(this.castillo.vida,480*0.9,320*0.07 );
+                this.puntos = new Texto(this.torre.vida,480*0.89,320*0.09 );
 
                 var bloque = new Bloque(imagenes.hierba, x,y, true);
                 bloque.y = bloque.y - bloque.alto/2;

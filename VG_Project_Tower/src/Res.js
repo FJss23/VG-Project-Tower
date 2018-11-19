@@ -35,12 +35,27 @@ var imagenes = {
     muerte_izquierda : "res/muerte_izquierda.png",
 
     torre: "res/torre.png",
+    vida_torre: "res/vida_torre.png",
+
+    aliado_mover_arriba: "res/aliado_caminar_arriba.png",
+    aliado_mover_abajo: "res/aliado_caminar_abajo.png",
+    aliado_mover_derecha: "res/aliado_caminar_derecha.png",
+    aliado_mover_izquierda: "res/aliado_caminar_izquierda.png",
+
+    enemigo_mover_arriba: "res/enemigo_caminar_arriba.png",
+    enemigo_mover_abajo: "res/enemigo_caminar_abajo.png",
+    enemigo_mover_derecha: "res/enemigo_caminar_derecha.png",
+    enemigo_mover_izquierda: "res/enemigo_caminar_izquierda.png",
+
+    enemigo_morir: "res/enemigo_morir.png",
+
+    recolectable_jugador: "res/recolectable_jugador.png",
+    recolectable_jugador_img: "res/recolectable_jugador_img.png",
 
     disparo_enemigo : "res/disparo_enemigo.png",
     icono_puntos : "res/icono_puntos.png",
     icono_vidas : "res/icono_vidas.png",
     enemigo_correr_izquierda : "res/enemigo_correr_izquierda.png",
-    enemigo_morir : "res/enemigo_morir.png",
     bloque_tierra : "res/bloque_tierra.png",
     bloque_metal : "res/bloque_metal.png",
     bloque_fondo_muro : "res/bloque_fondo_muro.png",
