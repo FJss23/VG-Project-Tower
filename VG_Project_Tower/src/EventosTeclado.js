@@ -26,6 +26,11 @@ function onKeyDown( event) {
             case 37:
                 controles.moverX = -1;
                 break;
+            case 69:
+                console.log("Tecla ataque especial presionada");
+                controles.ataqueEspecial = true;
+                controles.continuar = true;
+                break;
         }
     }
 }
@@ -38,7 +43,7 @@ function onKeyUp( event) {
 
     switch ( event.keyCode ){
         case 32:
-            controles.espado = false;
+            controles.espada = false;
             controles.continuar = false;
             break;
         case 38:
@@ -64,6 +69,10 @@ function onKeyUp( event) {
                 //console.log("Cambiar moverX = 0")
                 controles.moverX = 0;
             }
+            break;
+        case 69:
+            controles.ataqueEspecial = false;
+            controles.continuar = false;
             break;
     }
 }
