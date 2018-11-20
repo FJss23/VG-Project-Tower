@@ -19,11 +19,11 @@ class GameLayer extends Layer {
         this.scrollX = 0;
         this.bloques = [];
 
-        this.numRecolectables = new Texto(0,480*0.785,320*0.09);
+        this.numRecolectables = new Texto(0,480*0.7,320*0.09);
         this.fondoTorre =
             new Fondo(imagenes.vida_torre, 480*0.85,320*0.07 );
         this.fondoRecolectable =
-            new Fondo(imagenes.recolectable_jugador_img, 480*0.75,320*0.07);
+            new Fondo(imagenes.recolectable_jugador_img, 480*0.65,320*0.07);
 
         this.jugador = new Jugador(50, 50);
         //this.fondo = new Fondo(imagenes.fondo_2,480*0.5,320*0.5);
@@ -124,7 +124,6 @@ class GameLayer extends Layer {
         for(var i = 0; i < this.enemigos.length; i++){
             if(this.enemigos[i] != null &&
                 this.enemigos[i].estado == estados.muerto){
-                console.log("explosion");
                 this.espacio.eliminarCuerpoDinamico(this.enemigos[i]);
                 this.enemigos.splice(i, 1);
                 this.puntos.valor--;
@@ -347,14 +346,15 @@ class GameLayer extends Layer {
             }*/
             controles.espada = false;
         }
-        if(controles.ataqueEspecial){
-            var nuevoAtaqueEspecial = new AtaqueEspecial(this.jugador.x,
-                this.jugador.y);
-            if ( nuevoAtaqueEspecial != null ) {
-                this.espacio.agregarCuerpoDinamico(nuevoAtaqueEspecial);
-                this.ataquesEspeciales.push(nuevoAtaqueEspecial);
+        if(controles.ataqueEspecial) {
+            if (this.numRecolectables.valor > 0){
+                    var nuevoAtaqueEspecial = this.jugador.disparar();
+                if (nuevoAtaqueEspecial != null) {
+                    this.espacio.agregarCuerpoDinamico(nuevoAtaqueEspecial);
+                    this.ataquesEspeciales.push(nuevoAtaqueEspecial);
+                }
+                this.numRecolectables.valor--;
             }
-            console.log("generando ataque especial");
             controles.ataqueEspecial = false;
         }
 
@@ -418,7 +418,7 @@ class GameLayer extends Layer {
                 this.torre.y = this.torre.y - this.torre.alto/2;
                 this.espacio.agregarCuerpoEstatico(this.torre);
 
-                this.puntos = new Texto(this.torre.vida,480*0.89,320*0.09 );
+                this.puntos = new Texto(this.torre.vida,480*0.9,320*0.09 );
 
                 var bloque = new Bloque(imagenes.hierba, x,y, true);
                 bloque.y = bloque.y - bloque.alto/2;

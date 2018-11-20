@@ -37,7 +37,12 @@ var imagenes = {
     torre: "res/torre.png",
     vida_torre: "res/vida_torre.png",
 
-    ataque_especial: "res/disparo_especial.png",
+    disparo_especial: "res/disparo_especial.png",
+    disparo_especial_derecha: "res/disparo_especial_derecha.png",
+    disparo_especial_izquierda: "res/disparo_especial_izquierda.png",
+    disparo_especial_arriba: "res/disparo_especial_arriba.png",
+    disparo_especial_abajo: "res/disparo_especial_abajo.png",
+
     ataque_abajo_especial : "res/ataque_abajo_especial.png",
     ataque_arriba_especial : "res/ataque_arriba_especial.png",
     ataque_derecha_especial : "res/ataque_derecha_especial.png",

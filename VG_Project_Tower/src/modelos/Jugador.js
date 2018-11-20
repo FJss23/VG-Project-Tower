@@ -14,13 +14,22 @@ class Jugador extends Modelo {
 
         // Animaciones
         this.aAtacandoDerecha = new Animacion(imagenes.ataque_derecha,
-            85, 85, 1, 5, this.finAnimacionDisparar.bind(this) );
+            85, 85, 1, 5, this.finAnimacionAtacar.bind(this) );
         this.aAtacandoIzquierda = new Animacion(imagenes.ataque_izquierda,
-            85, 85, 1, 5, this.finAnimacionDisparar.bind(this));
+            85, 85, 1, 5, this.finAnimacionAtacar.bind(this));
         this.aAtacandoArriba = new Animacion(imagenes.ataque_arriba,
-            85, 85, 1, 5, this.finAnimacionDisparar.bind(this));
+            85, 85, 1, 5, this.finAnimacionAtacar.bind(this));
         this.aAtacandoAbajo = new Animacion(imagenes.ataque_abajo,
-            80, 85, 1, 5, this.finAnimacionDisparar.bind(this));
+            80, 85, 1, 5, this.finAnimacionAtacar.bind(this));
+
+        this.aAtacandoEspecialDerecha = new Animacion(imagenes.ataque_derecha_especial,
+            85, 85, 1, 5, this.finAnimacionAtacar.bind(this) );
+        this.aAtacandoEspecialIzquierda = new Animacion(imagenes.ataque_izquierda_especial,
+            85, 85, 1, 5, this.finAnimacionAtacar.bind(this));
+        this.aAtacandoEspecialArriba = new Animacion(imagenes.ataque_arriba_especial,
+            85, 85, 1, 5, this.finAnimacionAtacar.bind(this));
+        this.aAtacandoEspecialAbajo = new Animacion(imagenes.ataque_abajo_especial,
+            80, 85, 1, 5, this.finAnimacionAtacar.bind(this));
 
         this.aIdleDerecha = new Animacion(imagenes.idle_derecha,
             50, 50, 3, 8);
@@ -59,19 +68,15 @@ class Jugador extends Modelo {
         }
     }
 
-    finAnimacionDisparar(){
+    finAnimacionAtacar(){
         this.estado = estados.moviendo;
     }
 
-    golpeado (){
-        if (this.tiempoInvulnerable <= 0) {
-            if (this.vidas > 0) {
-                this.vidas--;
-                this.tiempoInvulnerable = 100;
-                // 100 actualizaciones de loop
-            }
-        }
+    disparar(){
+        this.estado = estados.atacandoEspecial;
+        return new AtaqueEspecial(this.x, this.y, this.orientacion);
     }
+
 
     actualizar(){
 
@@ -110,6 +115,20 @@ class Jugador extends Modelo {
                }
                if (this.orientacion == orientaciones.abajo) {
                    this.animacion = this.aAtacandoAbajo;
+               }
+               break;
+           case estados.atacandoEspecial:
+               if (this.orientacion == orientaciones.derecha) {
+                   this.animacion = this.aAtacandoEspecialDerecha;
+               }
+               if (this.orientacion == orientaciones.izquierda) {
+                   this.animacion = this.aAtacandoEspecialIzquierda;
+               }
+               if (this.orientacion == orientaciones.arriba) {
+                   this.animacion = this.aAtacandoEspecialArriba;
+               }
+               if (this.orientacion == orientaciones.abajo) {
+                   this.animacion = this.aAtacandoEspecialAbajo;
                }
                break;
            case estados.moviendo:

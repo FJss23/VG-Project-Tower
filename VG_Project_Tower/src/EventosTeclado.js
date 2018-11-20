@@ -27,7 +27,6 @@ function onKeyDown( event) {
                 controles.moverX = -1;
                 break;
             case 69:
-                console.log("Tecla ataque especial presionada");
                 controles.ataqueEspecial = true;
                 controles.continuar = true;
                 break;
