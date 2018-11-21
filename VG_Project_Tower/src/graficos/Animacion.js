@@ -49,16 +49,28 @@ class Animacion {
     }
 
     dibujar (x, y){
-        contexto.drawImage(
-            this.imagen,
-            this.rectanguloDibujo.x,
-            this.rectanguloDibujo.y,
-            this.rectanguloDibujo.ancho,
-            this.rectanguloDibujo.alto,
-            x - this.modeloAncho/2 ,
-            y - this.modeloAlto/2,
-            this.modeloAncho,
-            this.modeloAlto);
+        if(this.rectanguloDibujo.ancho <= 0 ||
+            this.rectanguloDibujo.alto <= 0) {
+            /*console.log(" imagen: " + this.imagen.src +
+                "rect.x:" + this.rectanguloDibujo.x +
+            " rect.y: " + this.rectanguloDibujo.y +
+            " rect.ancho: " + this.rectanguloDibujo.ancho +
+            " rect.alto: " + this.rectanguloDibujo.alto)*/
+            console.log("PROBLEMA CON ANIMACION");
+        }
+        if(this.rectanguloDibujo.ancho != 0 &&
+            this.rectanguloDibujo.alto != 0) {
+            contexto.drawImage(
+                this.imagen,
+                this.rectanguloDibujo.x,
+                this.rectanguloDibujo.y,
+                this.rectanguloDibujo.ancho,
+                this.rectanguloDibujo.alto,
+                x - this.modeloAncho / 2,
+                y - this.modeloAlto / 2,
+                this.modeloAncho,
+                this.modeloAlto);
+        }
     }
 
 }

@@ -19,6 +19,7 @@ class Espacio {
             this.dinamicos[i].choqueAbajo = false;
             this.dinamicos[i].fueraPorDerecha = true;
             this.dinamicos[i].fueraPorIzquierda = true;
+            this.dinamicos[i].choqueArriba = false;
 
             //derecha
             this.moverDerecha(i);
@@ -121,6 +122,7 @@ class Espacio {
                         (arribaDinamico + this.dinamicos[i].vy) - abajoEstatico ){
                         // Más restrictivo que el anterior!
                         movimientoPosible = abajoEstatico - arribaDinamico ;
+                        this.dinamicos[i].choqueArriba = true;
                     }
 
                 }

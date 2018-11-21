@@ -7,6 +7,8 @@ class AtaqueEspecial extends Modelo {
 
         var imagen, ancho, alto;
 
+        console.log("ESPECIAL ancho: " + this.ancho + " alto:" + this.alto);
+
         if(orientacion == orientaciones.derecha){
             imagen = imagenes.disparo_especial_derecha;
             ancho = 26/2;
@@ -21,23 +23,25 @@ class AtaqueEspecial extends Modelo {
         }
         else if(orientacion == orientaciones.abajo){
             imagen = imagenes.disparo_especial_abajo;
-            ancho = this.ancho;
-            alto = this.alto;
+            ancho = 60;
+            alto = 15;
             this.vy = 7;
         }
-        else if(orientacion == orientaciones.arriba){
+        else {
             imagen = imagenes.disparo_especial_arriba;
-            ancho = this.ancho;
-            alto = this.alto;
+            ancho = 60;
+            alto = 15;
             this.vy = -7;
         }
 
         this.animacion = new Animacion(imagen,
-            ancho, alto, 3, 2);
+            ancho, alto, 4, 2);
     }
 
     actualizar(){
         this.animacion.actualizar();
+        this.x += this.vx;
+        this.y += this.vy;
     }
 
     dibujar (scrollX){
