@@ -69,6 +69,7 @@ class Enemigo extends Modelo {
 
     impactado(){
         if ( this.estado != estados.explotando ){
+            reproducirEfecto(efectos.explosion);
             this.estado = estados.explotando;
         }
     }

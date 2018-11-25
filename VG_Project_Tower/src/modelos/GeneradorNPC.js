@@ -23,7 +23,7 @@ class GeneradorNPC extends Modelo {
         }
 
         // Tiempo de generación de personajes
-        this.cadenciaGeneracionEnemigo = 600;
+        this.cadenciaGeneracionEnemigo = 400;
         this.tiempoGeneracionEnemigo = 0;
 
         this.cadenciaGeneracionAliado = 3000;

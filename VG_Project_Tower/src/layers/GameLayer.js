@@ -9,9 +9,9 @@ class GameLayer extends Layer {
     }
 
     iniciar() {
-        //reproducirMusica();
+        reproducirMusica();
 
-        //this.botonSalto = new Boton(imagenes.boton_salto,480*0.9,320*0.55);
+        this.botonDisparo = new Boton(imagenes.boton_salto,480*0.9,320*0.55);
         this.botonEspada = new Boton(imagenes.boton_disparo,480*0.75,320*0.83);
         this.pad = new Pad(480*0.14,320*0.8);
         this.espacio = new Espacio(0);
@@ -20,14 +20,15 @@ class GameLayer extends Layer {
         this.scrollY = 0;
         this.bloques = [];
 
-        this.numRecolectables = new Texto(0,480*0.7,320*0.09);
+        this.numMaxRecoblectables = new Texto('5/',480*0.68,320*0.09);
+        this.numRecolectables = new Texto(0,480*0.72,320*0.09);
         this.fondoTorre =
             new Fondo(imagenes.vida_torre, 480*0.85,320*0.07 );
         this.fondoRecolectable =
             new Fondo(imagenes.recolectable_jugador_img, 480*0.65,320*0.07);
 
         this.textoEnemigo = new Texto('Enemigos:',480*0.3,320*0.09);
-        this.numEmemigosActuales = new Texto(10,480*0.5,320*0.09);
+        this.numEmemigosActuales = new Texto((nivelActual + 1) * 5,480*0.5,320*0.09);
 
         this.jugador = new Jugador(50, 50);
 
@@ -45,24 +46,6 @@ class GameLayer extends Layer {
         if (this.pausa){
             return;
         }
-        /*
-        if ( this.copa.colisiona(this.jugador)){
-            nivelActual++;
-            if (nivelActual > nivelMaximo){
-                nivelActual = 0;
-            }
-            this.pausa = true;
-            this.mensaje =
-                new Boton(imagenes.mensaje_ganar, 480/2, 320/2);
-            this.iniciar();
-        }
-
-
-        // Jugador se cae
-        if ( this.jugador.y > 480 ){
-            this.iniciar();
-        }
-        */
         this.espacio.actualizar();
         this.jugador.actualizar();
 
@@ -212,7 +195,9 @@ class GameLayer extends Layer {
 
         //colision Enemigo - jugador
         for(var i = 0; i < this.enemigos.length; i++){
-            if(this.jugador.colisiona(this.enemigos[i])){
+            if(this.jugador.colisiona(this.enemigos[i]) &&
+                this.enemigos[i].estado != estados.muriendo){
+
                 this.jugador.impactado();
                 this.enemigos[i].atacado();
             }
@@ -292,17 +277,18 @@ class GameLayer extends Layer {
         for (var i=0; i < this.ataquesEspeciales.length; i++) {
             this.ataquesEspeciales[i].dibujar(this.scrollX, this.scrollY);
         }
-        //his.fondoPuntos.dibujar();
+
         this.fondoRecolectable.dibujar();
         this.fondoTorre.dibujar();
         this.puntos.dibujar();
         this.numRecolectables.dibujar();
         this.textoEnemigo.dibujar();
         this.numEmemigosActuales.dibujar();
+        this.numMaxRecoblectables.dibujar();
 
         if ( !this.pausa && entrada == entradas.pulsaciones) {
             this.botonEspada.dibujar();
-            //this.botonSalto.dibujar();
+            this.botonDisparo.dibujar();
             this.pad.dibujar();
         }
         if ( this.pausa ) {
@@ -313,7 +299,7 @@ class GameLayer extends Layer {
     calcularPulsaciones(pulsaciones){
         // Suponemos botones no estan pulsados
         this.botonEspada.pulsado = false;
-        //this.botonSalto.pulsado = false;
+        this.botonDisparo.pulsado = false;
         // suponemos que el pad esta en el centro
         controles.moverX = 0;
         // Suponemos a false
@@ -348,19 +334,23 @@ class GameLayer extends Layer {
                     controles.espada = true;
                 }
             }
-            /*
-            if (this.botonSalto.contienePunto(pulsaciones[i].x , pulsaciones[i].y) ){
-                this.botonSalto.pulsado = true;
+            if (this.botonDisparo.contienePunto(pulsaciones[i].x , pulsaciones[i].y) ){
+                this.botonDisparo.pulsado = true;
                 if ( pulsaciones[i].tipo == tipoPulsacion.inicio) {
-                    controles.moverY = 1;
+                    controles.ataqueEspecial = true;
                 }
-            }*/
+            }
 
         }
 
         // No pulsado - Boton espada
         if ( !this.botonEspada.pulsado ){
             controles.espada = false;
+        }
+
+        // No pulsado - Boton disparo
+        if ( !this.botonDisparo.pulsado ){
+            controles.ataqueEspecial = false;
         }
     }
 
@@ -419,7 +409,6 @@ class GameLayer extends Layer {
             var lineas = texto.split('\n');
             this.anchoMapa = (lineas[0].length-1) * 40;
             this.largoMapa = (lineas.length)* 32;
-            console.log(lineas.length);
             for (var i = 0; i < lineas.length; i++){
                 var linea = lineas[i];
                 for (var j = 0; j < linea.length; j++){

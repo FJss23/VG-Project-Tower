@@ -67,6 +67,7 @@ class Jugador extends Modelo {
 
     ataqueEspada(){
         if ( this.tiempoEspada == 0) {
+            reproducirEfecto(efectos.espada);
             // reiniciar Cadencia
             this.estado = estados.atacandoEspada;
             this.tiempoEspada = this.cadenciaEspada;
@@ -88,6 +89,7 @@ class Jugador extends Modelo {
     }
 
     disparar(){
+        reproducirEfecto(efectos.disparo);
         this.estado = estados.atacandoEspecial;
         return new AtaqueEspecial(this.x, this.y, this.orientacion);
     }
