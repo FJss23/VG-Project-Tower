@@ -17,6 +17,7 @@ class GameLayer extends Layer {
         this.espacio = new Espacio(0);
 
         this.scrollX = 0;
+        this.scrollY = 0;
         this.bloques = [];
 
         this.numRecolectables = new Texto(0,480*0.7,320*0.09);
@@ -25,8 +26,10 @@ class GameLayer extends Layer {
         this.fondoRecolectable =
             new Fondo(imagenes.recolectable_jugador_img, 480*0.65,320*0.07);
 
+        this.textoEnemigo = new Texto('Enemigos:',480*0.3,320*0.09);
+        this.numEmemigosActuales = new Texto(10,480*0.5,320*0.09);
+
         this.jugador = new Jugador(50, 50);
-        //this.fondo = new Fondo(imagenes.fondo_2,480*0.5,320*0.5);
 
         this.ataquesEspeciales = [];
 
@@ -78,6 +81,7 @@ class GameLayer extends Layer {
             }
         }
 
+        //colision aliado - torre
         for(var i = 0; i < this.aliados.length; i++){
             if(this.aliados[i] != null && this.torre.colisiona(this.aliados[i])){
                 this.espacio.eliminarCuerpoDinamico(this.aliados[i]);
@@ -85,6 +89,7 @@ class GameLayer extends Layer {
             }
         }
 
+        //colision enemigo - torre
         for(var i = 0; i < this.enemigos.length; i++){
             if(this.enemigos[i] != null &&
             this.enemigos[i].colisiona(this.torre)){
@@ -97,33 +102,15 @@ class GameLayer extends Layer {
             this.enemigos[i].actualizar();
         }
 
-        for(var i = 0; i < this.recolectables.length; i++){
-            this.recolectables[i].actualizar();
+        for(var i = 0; i < this.aliados.length; i++){
+            this.aliados[i].actualizar();
         }
 
-        // Eliminar disparos fuera de pantalla
-        /*for (var i=0; i < this.ataquesEspeciales.length; i++) {
-            for (var j = 0; j < this.espacio.estaticos.length; j++) {
-                if (this.ataquesEspeciales[i] != null &&
-                    this.ataquesEspeciales[i].colisiona(this.espacio.estaticos[j])) {
-
-                    /*if (!this.ataquesEspeciales[i].estaEnPantalla() ||
-                        (this.disparosJugador[i].vx == 0 && this.disparosJugador[i].vy == 0)
-                        || (this.disparosJugador[i].colisiona(this.bloques[j]) &&
-                            !this.bloques[j].fondo)) {
-*/
-                        /*this.espacio
-                            .eliminarCuerpoDinamico(this.ataquesEspeciales[i]);
-                        this.ataquesEspeciales.splice(i, 1);*/
-                    /*}
-                }
-            }*/
-
-
-
+        //si el enemigo muere cuando llega a la torre, le quito vida (a la torre)
         for(var i = 0; i < this.enemigos.length; i++){
             if(this.enemigos[i] != null &&
-                this.enemigos[i].estado == estados.muerto){
+                this.enemigos[i].estado == estados.impactado){
+
                 this.espacio.eliminarCuerpoDinamico(this.enemigos[i]);
                 this.enemigos.splice(i, 1);
                 this.puntos.valor--;
@@ -137,15 +124,6 @@ class GameLayer extends Layer {
             this.ataquesEspeciales[i].actualizar();
         }
 
-        // colisiones
-        /*for (var i=0; i < this.enemigos.length; i++){
-            if ( this.jugador.colisiona(this.enemigos[i])){
-                this.jugador.golpeado();
-                if (this.jugador.vidas <= 0){
-                    this.iniciar();
-                }
-            }
-        }*/
         // colisiones , ataqueEspecial - Enemigo
         for (var i=0; i < this.ataquesEspeciales.length; i++){
             for (var j=0; j < this.enemigos.length; j++){
@@ -154,54 +132,72 @@ class GameLayer extends Layer {
                     this.enemigos[j] != null &&
                     this.ataquesEspeciales[i].colisiona(this.enemigos[j])) {
 
-                        /*this.espacio
-                            .eliminarCuerpoDinamico(this.ataquesEspeciales[i]);
-                        this.ataquesEspeciales.splice(i, 1);
-                        this.enemigos[j].impactado();*/
-
-                    this.espacio.eliminarCuerpoDinamico(this.enemigos[j]);
-                    this.enemigos.splice(j, 1);
-
+                    this.enemigos[i].atacado(); //muestro una animacion de morir
                 }
             }
         }
-        /*
-        // Enemigos muertos fuera del juego
-        for (var j=0; j < this.enemigos.length; j++){
-            if ( this.enemigos[j] != null &&
-                this.enemigos[j].estado == estados.muerto  ) {
 
-                this.espacio
-                    .eliminarCuerpoDinamico(this.enemigos[j]);
-                this.enemigos.splice(j, 1);
-
-            }
-        }*/
-
-        // Comprobar colision de la espada con el enemigo
+        // Colision Enemigo - ataque con espada
         for(var i = 0; i < this.enemigos.length; i++){
             if(this.enemigos[i] != null){
                 if(this.jugador.comprobarAtaqueEspada(this.enemigos[i])){
-                    var recolectable = this.enemigos[i].enemigoConRecolectable();
-                    if(recolectable != null){
-                        this.recolectables.push(recolectable);
-                        this.espacio.agregarCuerpoDinamico(recolectable);
-                    }
-                    this.espacio.eliminarCuerpoDinamico(this.enemigos[i]);
-                    this.enemigos.splice(i, 1);
+                    this.enemigos[i].atacado(); //muestro una animacion de morir
                 }
             }
         }
 
-        // Comprobar colision de la espada con el enemigo
-        for(var i = 0; i < this.aliados.length; i++){
-            if(this.aliados[i] != null){
-                if(this.jugador.comprobarAtaqueEspada(this.aliados[i])){
+        //Acaba la animacion de morir del enemigo
+        for(var i = 0; i < this.enemigos.length; i++){
+            if(this.enemigos[i].estado == estados.muerto &&
+            this.enemigos[i] != null){
+                var recolectable = this.enemigos[i].enemigoConRecolectable();
+                if(recolectable != null){
+                    this.recolectables.push(recolectable);
+                    this.espacio.agregarCuerpoDinamico(recolectable);
+                }
+                this.espacio.eliminarCuerpoDinamico(this.enemigos[i]);
+                this.enemigos.splice(i, 1);
+                this.numEmemigosActuales.valor--;
+                if(this.numEmemigosActuales.valor == 0){
+                    nivelActual++;
+                    if (nivelActual > nivelMaximo){
+                        nivelActual = 0;
+                    }
+                    this.pausa = true;
+                    this.mensaje =
+                        new Boton(imagenes.mensaje_ganar, 480/2, 320/2);
                     this.iniciar();
                 }
             }
         }
 
+        for(var i = 0; i < this.recolectables.length; i++){
+            this.recolectables[i].actualizar();
+        }
+
+        // Colision Aliado - ataque con espada
+        for(var i = 0; i < this.aliados.length; i++){
+            if(this.aliados[i] != null){
+                if(this.jugador.comprobarAtaqueEspada(this.aliados[i])){
+                    //enseño una animacion de morir y el juego se reinicia
+                    this.aliados[i].atacado();
+                }
+            }
+        }
+
+        // colisiones , ataqueEspecial - Aliado
+        for (var i=0; i < this.ataquesEspeciales.length; i++){
+            for (var j=0; j < this.aliados.length; j++){
+
+                if (this.ataquesEspeciales[i] != null &&
+                    this.ataquesEspeciales[i].colisiona(this.aliados[j])) {
+                    //enseño una animacion de morir y el juego se reinicia
+                    this.aliados[i].atacado();
+                }
+            }
+        }
+
+        // Colision recolectable - jugador
         for(var i = 0; i < this.recolectables.length; i++){
             if(this.recolectables[i] != null){
                 if(this.jugador.colisiona(this.recolectables[i])){
@@ -210,6 +206,34 @@ class GameLayer extends Layer {
                     if(this.numRecolectables.valor < 5){
                         this.numRecolectables.valor++;
                     }
+                }
+            }
+        }
+
+        //colision Enemigo - jugador
+        for(var i = 0; i < this.enemigos.length; i++){
+            if(this.jugador.colisiona(this.enemigos[i])){
+                this.jugador.impactado();
+                this.enemigos[i].atacado();
+            }
+        }
+
+        //colision Aliado - jugador
+        for(var i = 0; i < this.aliados.length; i++){
+            if(this.jugador.colisiona(this.aliados[i])){
+                this.jugador.impactado();
+                this.aliados[i].atacado();
+            }
+        }
+
+        //colision Ataque especial - bloques de la pared
+        for(var i = 0; i < this.ataquesEspeciales.length; i++){
+            for(var j = 0; j < this.bloques.length; j++) {
+                if (this.ataquesEspeciales[i] != null &&
+                    this.ataquesEspeciales[i].colisiona(this.bloques[j])
+                    && !this.bloques[j].fondo) {
+
+                    this.ataquesEspeciales.splice(i, 1);
                 }
             }
         }
@@ -229,38 +253,52 @@ class GameLayer extends Layer {
                 this.scrollX = this.jugador.x - 480 * 0.7;
             }
         }
+
+        if ( this.jugador.y > 320 * 0.3) {
+            if (this.jugador.y - this.scrollY < 320 * 0.3) {
+                this.scrollY = this.jugador.y - 320 * 0.3;
+            }
+        }
+
+        if ( this.jugador.y < this.largoMapa - 320 * 0.3 ) {
+            if (this.jugador.y - this.scrollY > 320 * 0.7) {
+                this.scrollY = this.jugador.y - 320 * 0.7;
+            }
+        }
     }
 
     dibujar (){
         this.calcularScroll();
-        //this.fondo.dibujar();
+
         for (var i=0; i < this.bloques.length; i++){
-            this.bloques[i].dibujar(this.scrollX);
+            this.bloques[i].dibujar(this.scrollX, this.scrollY);
         }
-
-        this.jugador.dibujar(this.scrollX);
-
+        this.torre.dibujar(this.scrollX, this.scrollY);
         for(var i = 0; i < this.generadores.length; i++){
-            this.generadores[i].dibujar(this.scrollX);
+            this.generadores[i].dibujar(this.scrollX, this.scrollY);
         }
+
         for (var i=0; i < this.enemigos.length; i++){
-            this.enemigos[i].dibujar(this.scrollX);
+            this.enemigos[i].dibujar(this.scrollX, this.scrollY);
         }
         for (var i=0; i < this.aliados.length; i++){
-            this.aliados[i].dibujar(this.scrollX);
+            this.aliados[i].dibujar(this.scrollX, this.scrollY);
         }
-        this.torre.dibujar(this.scrollX);
+
         for(var i = 0; i < this.recolectables.length; i++){
-            this.recolectables[i].dibujar(this.scrollX);
+            this.recolectables[i].dibujar(this.scrollX, this.scrollY);
         }
+        this.jugador.dibujar(this.scrollX, this.scrollY);
         for (var i=0; i < this.ataquesEspeciales.length; i++) {
-            this.ataquesEspeciales[i].dibujar(this.scrollX);
+            this.ataquesEspeciales[i].dibujar(this.scrollX, this.scrollY);
         }
         //his.fondoPuntos.dibujar();
         this.fondoRecolectable.dibujar();
         this.fondoTorre.dibujar();
         this.puntos.dibujar();
         this.numRecolectables.dibujar();
+        this.textoEnemigo.dibujar();
+        this.numEmemigosActuales.dibujar();
 
         if ( !this.pausa && entrada == entradas.pulsaciones) {
             this.botonEspada.dibujar();
@@ -324,11 +362,6 @@ class GameLayer extends Layer {
         if ( !this.botonEspada.pulsado ){
             controles.espada = false;
         }
-
-        // No pulsado - Boton Salto
-        /*if ( !this.botonSalto.pulsado ){
-            controles.moverY = 0;
-        }*/
     }
 
 
@@ -346,7 +379,6 @@ class GameLayer extends Layer {
             if (this.numRecolectables.valor > 0){
                 var nuevoAtaqueEspecial = this.jugador.disparar();
                 if (nuevoAtaqueEspecial != null) {
-                    //this.espacio.agregarCuerpoDinamico(nuevoAtaqueEspecial);
                     this.ataquesEspeciales.push(nuevoAtaqueEspecial);
                 }
                 this.numRecolectables.valor--;
@@ -386,6 +418,8 @@ class GameLayer extends Layer {
             var texto = fichero.responseText;
             var lineas = texto.split('\n');
             this.anchoMapa = (lineas[0].length-1) * 40;
+            this.largoMapa = (lineas.length)* 32;
+            console.log(lineas.length);
             for (var i = 0; i < lineas.length; i++){
                 var linea = lineas[i];
                 for (var j = 0; j < linea.length; j++){

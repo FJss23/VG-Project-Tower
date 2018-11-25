@@ -6,10 +6,8 @@ var imagenes = {
     enemigo : "res/enemigo.png",
     aliado : "res/aliado.png",
 
-    enemigo_movimiento : "res/enemigo_movimiento.png",
-    disparo_jugador : "res/disparo_jugador2.png",
-
     hierba:"res/hierba.png",
+    bloque_tierra: "res/bloque_tierra.png",
 
     ataque_abajo : "res/ataque_abajo.png",
     ataque_arriba : "res/ataque_arriba.png",
@@ -58,18 +56,12 @@ var imagenes = {
     enemigo_mover_derecha: "res/enemigo_caminar_derecha.png",
     enemigo_mover_izquierda: "res/enemigo_caminar_izquierda.png",
 
-    enemigo_morir: "res/enemigo_morir.png",
+    enemigo_morir : "res/enemigo_morir.png",
+    morir_npc : "res/morir_NPC.png",
 
     recolectable_jugador: "res/recolectable_jugador.png",
     recolectable_jugador_img: "res/recolectable_jugador_img.png",
 
-    disparo_enemigo : "res/disparo_enemigo.png",
-    icono_puntos : "res/icono_puntos.png",
-    icono_vidas : "res/icono_vidas.png",
-    enemigo_correr_izquierda : "res/enemigo_correr_izquierda.png",
-    bloque_tierra : "res/bloque_tierra.png",
-    bloque_metal : "res/bloque_metal.png",
-    bloque_fondo_muro : "res/bloque_fondo_muro.png",
     pad :"res/pad.png",
     boton_disparo : "res/boton_disparo.png",
     boton_salto : "res/boton_salto.png",
@@ -89,7 +81,6 @@ function cargarImagenes(indice){
     imagenCargar.src = rutasImagenes[indice];
     imagenCargar.onload = function(){
         if ( indice < rutasImagenes.length-1 ){
-            console.log("cargando imagen de indice " + indice);
             indice++;
 
             cargarImagenes(indice);

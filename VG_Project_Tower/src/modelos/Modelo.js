@@ -12,18 +12,19 @@ class Modelo {
     estaEnPantalla (){
         if ( (this.x - gameLayer.scrollX) - this.ancho/2 <= 480 &&
             (this.x - gameLayer.scrollX) + this.ancho/2 >= 0 &&
-            this.y - this.alto/2 <= 320 &&
-            this.y + this.alto/2 >= 0 ){
+            (this.y - gameLayer.scrollY)- this.alto/2 <= 320 &&
+            (this.y - gameLayer.scrollY) + this.alto/2 >= 0 ){
             return true;
         }
         return false;
     }
 
-    dibujar (scrollX){
+    dibujar (scrollX, scrollY){
         scrollX = scrollX || 0;
+        scrollY = scrollY || 0;
         contexto.drawImage(this.imagen,
             this.x - this.imagen.width/2 - scrollX,
-            this.y - this.imagen.height/2);
+            this.y - this.imagen.height/2 - scrollY);
     }
 
 

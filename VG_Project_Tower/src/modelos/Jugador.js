@@ -2,7 +2,6 @@ class Jugador extends Modelo {
 
     constructor(x, y) {
         super(imagenes.jugador, x, y)
-        this.vidas = 3;
         this.tiempoInvulnerable = 0;
 
         this.ratioEspada = 0.10;
@@ -14,22 +13,22 @@ class Jugador extends Modelo {
 
         // Animaciones
         this.aAtacandoDerecha = new Animacion(imagenes.ataque_derecha,
-            85, 85, 1, 5, this.finAnimacionAtacar.bind(this) );
+            86, 96, 1, 5, this.finAnimacionAtacar.bind(this) );
         this.aAtacandoIzquierda = new Animacion(imagenes.ataque_izquierda,
-            85, 85, 1, 5, this.finAnimacionAtacar.bind(this));
+            86, 96, 1, 5, this.finAnimacionAtacar.bind(this));
         this.aAtacandoArriba = new Animacion(imagenes.ataque_arriba,
-            85, 85, 1, 5, this.finAnimacionAtacar.bind(this));
+            80, 86, 1, 5, this.finAnimacionAtacar.bind(this));
         this.aAtacandoAbajo = new Animacion(imagenes.ataque_abajo,
-            80, 85, 1, 5, this.finAnimacionAtacar.bind(this));
+            80, 86, 1, 5, this.finAnimacionAtacar.bind(this));
 
         this.aAtacandoEspecialDerecha = new Animacion(imagenes.ataque_derecha_especial,
-            85, 85, 1, 5, this.finAnimacionAtacar.bind(this) );
+            86, 96, 2, 5, this.finAnimacionAtacar.bind(this) );
         this.aAtacandoEspecialIzquierda = new Animacion(imagenes.ataque_izquierda_especial,
-            85, 85, 1, 5, this.finAnimacionAtacar.bind(this));
+            86, 96, 2, 5, this.finAnimacionAtacar.bind(this));
         this.aAtacandoEspecialArriba = new Animacion(imagenes.ataque_arriba_especial,
-            85, 85, 1, 5, this.finAnimacionAtacar.bind(this));
+            80, 86, 2, 5, this.finAnimacionAtacar.bind(this));
         this.aAtacandoEspecialAbajo = new Animacion(imagenes.ataque_abajo_especial,
-            80, 85, 1, 5, this.finAnimacionAtacar.bind(this));
+            80, 86, 2, 5, this.finAnimacionAtacar.bind(this));
 
         this.aIdleDerecha = new Animacion(imagenes.idle_derecha,
             50, 50, 3, 8);
@@ -39,23 +38,31 @@ class Jugador extends Modelo {
             50, 50, 3, 8);
         this.aIdleAbajo = new Animacion(imagenes.idle_abajo,
             50, 50, 3, 8);
+
         this.aCorriendoDerecha =
             new Animacion(imagenes.caminar_derecha,
             46, 50, 1, 8);
         this.aCorriendoIzquierda = new Animacion(imagenes.caminar_izquierda,
-            46, 50, 1, 8, null);
+            46, 50, 1, 8);
         this.aCorriendoArriba =
             new Animacion(imagenes.caminar_arriba,
                 46, 50, 1, 8);
         this.aCorriendoAbajo = new Animacion(imagenes.caminar_abajo,
-            46, 50, 1, 8, null);
+            46, 50, 1, 8);
+
+        this.aMorirArriba = new Animacion(imagenes.muerte_arriba,
+            64, 66, 3, 5, this.finAnimacionMorir.bind(this));
+        this.aMorirAbajo = new Animacion(imagenes.muerte_abajo,
+            64, 66, 3, 5, this.finAnimacionMorir.bind(this));
+        this.aMorirIzquierda = new Animacion(imagenes.muerte_izquierda,
+            64, 66, 3, 5, this.finAnimacionMorir.bind(this));
+        this.aMorirDerecha = new Animacion(imagenes.muerte_derecha,
+            64, 66, 3, 5, this.finAnimacionMorir.bind(this));
 
         this.animacion = this.aIdleDerecha;
 
-        // Disparo
         this.cadenciaEspada = 1;
         this.tiempoEspada = 0;
-
     }
 
     ataqueEspada(){
@@ -63,13 +70,21 @@ class Jugador extends Modelo {
             // reiniciar Cadencia
             this.estado = estados.atacandoEspada;
             this.tiempoEspada = this.cadenciaEspada;
-
-            //reproducirEfecto(efectos.disparo);
         }
     }
 
     finAnimacionAtacar(){
         this.estado = estados.moviendo;
+    }
+
+    finAnimacionMorir(){
+        gameLayer.iniciar();
+    }
+
+    impactado(){
+        this.estado = estados.impactado;
+        gameLayer.espacio.eliminarCuerpoDinamico(this);
+        gameLayer.espacio.agregarCuerpoEstatico(this);
     }
 
     disparar(){
@@ -80,26 +95,23 @@ class Jugador extends Modelo {
 
     actualizar(){
 
-        if (this.tiempoInvulnerable > 0 ){
-            this.tiempoInvulnerable--;
-        }
-
         this.animacion.actualizar();
 
-        // Establecer orientación
-        if ( this.vx > 0 ){
-            this.orientacion = orientaciones.derecha;
+        if(this.estado != estados.impactado) {
+            // Establecer orientación
+            if (this.vx > 0) {
+                this.orientacion = orientaciones.derecha;
+            }
+            if (this.vx < 0) {
+                this.orientacion = orientaciones.izquierda;
+            }
+            if (this.vy > 0) {
+                this.orientacion = orientaciones.abajo;
+            }
+            if (this.vy < 0) {
+                this.orientacion = orientaciones.arriba;
+            }
         }
-        if ( this.vx < 0 ){
-            this.orientacion = orientaciones.izquierda;
-        }
-        if ( this.vy > 0 ){
-            this.orientacion = orientaciones.abajo;
-        }
-        if ( this.vy < 0 ){
-            this.orientacion = orientaciones.arriba;
-        }
-
 
         // Selección de animación
        switch (this.estado){
@@ -129,6 +141,20 @@ class Jugador extends Modelo {
                }
                if (this.orientacion == orientaciones.abajo) {
                    this.animacion = this.aAtacandoEspecialAbajo;
+               }
+               break;
+           case estados.impactado:
+               if (this.orientacion == orientaciones.derecha) {
+                   this.animacion =  this.aMorirDerecha;
+               }
+               if (this.orientacion == orientaciones.izquierda) {
+                   this.animacion =  this.aMorirIzquierda;
+               }
+               if (this.orientacion == orientaciones.arriba) {
+                   this.animacion =  this.aMorirArriba;
+               }
+               if (this.orientacion == orientaciones.abajo) {
+                   this.animacion =  this.aMorirAbajo;
                }
                break;
            case estados.moviendo:
@@ -172,16 +198,19 @@ class Jugador extends Modelo {
         if ( this.tiempoEspada > 0 ) {
             this.tiempoEspada--;
         }
+
+
     }
 
-    dibujar (scrollX){
+    dibujar (scrollX, scrollY){
         scrollX = scrollX || 0;
+        scrollY = scrollY || 0;
         if ( this.tiempoInvulnerable > 0) {
             contexto.globalAlpha = 0.5;
-            this.animacion.dibujar(this.x - scrollX, this.y);
+            this.animacion.dibujar(this.x - scrollX, this.y - scrollY);
             contexto.globalAlpha = 1;
         } else {
-            this.animacion.dibujar(this.x - scrollX, this.y);
+            this.animacion.dibujar(this.x - scrollX, this.y - scrollY);
         }
     }
 

@@ -7,35 +7,37 @@ class AtaqueEspecial extends Modelo {
 
         var imagen, ancho, alto;
 
-        console.log("ESPECIAL ancho: " + this.ancho + " alto:" + this.alto);
-
         if(orientacion == orientaciones.derecha){
             imagen = imagenes.disparo_especial_derecha;
-            ancho = 26/2;
-            alto = 57;
+            ancho = 14;
+            alto = 58;
             this.vx = 7;
         }
         else if(orientacion == orientaciones.izquierda){
             imagen = imagenes.disparo_especial_izquierda;
-            ancho = 26/2;
-            alto = 57;
+            ancho = 14;
+            alto = 58;
             this.vx = -7;
         }
         else if(orientacion == orientaciones.abajo){
             imagen = imagenes.disparo_especial_abajo;
             ancho = 60;
-            alto = 15;
+            alto = 16;
             this.vy = 7;
         }
         else {
             imagen = imagenes.disparo_especial_arriba;
             ancho = 60;
-            alto = 15;
+            alto = 16;
             this.vy = -7;
         }
 
-        this.animacion = new Animacion(imagen,
-            ancho, alto, 4, 2);
+        this.animacion = new Animacion(imagen, ancho, alto, 3, 2);
+
+        /*console.log("nuevo ataque especial generado -> ALTO: " + this.animacion.rectanguloDibujo.alto
+        + ", ANCHO: " + this.animacion.rectanguloDibujo.ancho + ", FRAME_ANCHO: " + this.animacion.frameAncho
+        + ", FRAME_ALTO: " + this.animacion.frameAlto + ", IMAGEN_ANCHO: " + this.animacion.imagen.width +
+        ", FRAMES_TOTALES: " + this.animacion.framesTotales + ", IMAGEN: " + this.animacion.imagen.src);*/
     }
 
     actualizar(){
@@ -44,8 +46,9 @@ class AtaqueEspecial extends Modelo {
         this.y += this.vy;
     }
 
-    dibujar (scrollX){
+    dibujar (scrollX, scrollY){
         scrollX = scrollX || 0;
-        this.animacion.dibujar(this.x - scrollX, this.y);
+        scrollY = scrollY || 0;
+        this.animacion.dibujar(this.x - scrollX, this.y - scrollY);
     }
 }

@@ -4,7 +4,7 @@ class Recolectable extends Modelo {
         super(imagenes.recolectable_jugador_img, x, y,);
 
         this.animacion = new Animacion(imagenes.recolectable_jugador,
-            18, 22, 4, 4);
+            28, 36, 4, 4);
     }
 
     actualizar () {
@@ -12,8 +12,9 @@ class Recolectable extends Modelo {
         this.animacion.actualizar();
     }
 
-    dibujar (scrollX){
+    dibujar (scrollX, scrollY){
         scrollX = scrollX || 0;
-        this.animacion.dibujar(this.x - scrollX, this.y);
+        scrollY = scrollY || 0;
+        this.animacion.dibujar(this.x - scrollX, this.y - scrollY);
     }
 }

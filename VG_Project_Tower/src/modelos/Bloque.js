@@ -4,5 +4,4 @@ class Bloque extends Modelo {
         super(rutaImagen, x, y);
         this.fondo = fondo;
     }
-
 }

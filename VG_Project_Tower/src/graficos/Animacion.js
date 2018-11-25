@@ -1,7 +1,6 @@
 class Animacion {
 
     constructor(imagenSrc, modeloAncho, modeloAlto, velocidadRefresco, framesTotales, callback) {
-        // Nuevo
         this.callback = callback;
 
         this.imagen = new Image();
@@ -57,9 +56,7 @@ class Animacion {
             " rect.ancho: " + this.rectanguloDibujo.ancho +
             " rect.alto: " + this.rectanguloDibujo.alto)*/
             console.log("PROBLEMA CON ANIMACION");
-        }
-        if(this.rectanguloDibujo.ancho != 0 &&
-            this.rectanguloDibujo.alto != 0) {
+        } else {
             contexto.drawImage(
                 this.imagen,
                 this.rectanguloDibujo.x,
@@ -71,6 +68,8 @@ class Animacion {
                 this.modeloAncho,
                 this.modeloAlto);
         }
+
+
     }
 
 }

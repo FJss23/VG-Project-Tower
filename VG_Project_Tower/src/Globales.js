@@ -26,6 +26,7 @@ estados.muerto = 5;
 estados.atacandoEspada = 6;
 estados.atacandoEspecial = 7;
 estados.impactado = 8;
+estados.explotando = 9;
 
 var orientaciones = {};
 orientaciones.derecha = 2;

@@ -10,16 +10,16 @@ class GeneradorNPC extends Modelo {
         this.addPositionY = 0;
 
         if(vxNpc > 0){
-            this.addPositionX = 20;
+            this.addPositionX = 40;
         }
         else if(vxNpc < 0){
-            this.addPositionX = -30;
+            this.addPositionX = -40;
         }
         else if(vyNpc > 0){
-            this.addPositionY = 30;
+            this.addPositionY = 40;
         }
         else if(vyNpc < 0){
-            this.addPositionY = - 30;
+            this.addPositionY = - 40;
         }
 
         // Tiempo de generación de personajes
