@@ -55,7 +55,7 @@ class Animacion {
             " rect.y: " + this.rectanguloDibujo.y +
             " rect.ancho: " + this.rectanguloDibujo.ancho +
             " rect.alto: " + this.rectanguloDibujo.alto)*/
-            console.log("PROBLEMA CON ANIMACION");
+            //console.log("PROBLEMA CON ANIMACION");
         } else {
             contexto.drawImage(
                 this.imagen,

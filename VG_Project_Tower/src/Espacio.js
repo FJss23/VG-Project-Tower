@@ -130,6 +130,10 @@ class Espacio {
 
             this.dinamicos[i].y = this.dinamicos[i].y + movimientoPosible;
             this.dinamicos[i].vy = movimientoPosible;
+            if( this.dinamicos[i].choqueArriba){
+                this.dinamicos[i].vy = 0;
+                this.dinamicos[i].vx = 0;
+            }
         }
     }
 

@@ -115,7 +115,7 @@ class GameLayer extends Layer {
                     this.enemigos[j] != null &&
                     this.ataquesEspeciales[i].colisiona(this.enemigos[j])) {
 
-                    this.enemigos[i].atacado(); //muestro una animacion de morir
+                    this.enemigos[j].atacado(); //muestro una animacion de morir
                 }
             }
         }
@@ -175,7 +175,7 @@ class GameLayer extends Layer {
                 if (this.ataquesEspeciales[i] != null &&
                     this.ataquesEspeciales[i].colisiona(this.aliados[j])) {
                     //enseño una animacion de morir y el juego se reinicia
-                    this.aliados[i].atacado();
+                    this.aliados[j].atacado();
                 }
             }
         }
@@ -456,7 +456,7 @@ class GameLayer extends Layer {
             case "2":
                 var generador = new GeneradorNPC(imagenes.salida_izquierda,x, y, 1, 0);
                 generador.y = generador.y - generador.alto/2;
-                this.espacio.agregarCuerpoEstatico(generador);
+                //this.espacio.agregarCuerpoEstatico(generador);
                 this.generadores.push(generador);
 
                 var bloque = new Bloque(imagenes.bloque_tierra, x,y, false);
@@ -466,7 +466,7 @@ class GameLayer extends Layer {
             case "3":
                 var generador = new GeneradorNPC(imagenes.salida_arriba,x, y, 0, 1);
                 generador.y = generador.y - generador.alto/2;
-                this.espacio.agregarCuerpoEstatico(generador);
+                //this.espacio.agregarCuerpoEstatico(generador);
                 this.generadores.push(generador);
 
                 var bloque = new Bloque(imagenes.bloque_tierra, x,y, false);
@@ -476,7 +476,7 @@ class GameLayer extends Layer {
             case "4":
                 var generador = new GeneradorNPC(imagenes.salida_derecha,x, y, -1, 0);
                 generador.y = generador.y - generador.alto/2;
-                this.espacio.agregarCuerpoEstatico(generador);
+                //this.espacio.agregarCuerpoEstatico(generador);
                 this.generadores.push(generador);
 
                 var bloque = new Bloque(imagenes.bloque_tierra, x,y, false);
@@ -486,7 +486,7 @@ class GameLayer extends Layer {
             case "5":
                 var generador = new GeneradorNPC(imagenes.salida_abajo, x, y, 0, -1);
                 generador.y = generador.y - generador.alto/2;
-                this.espacio.agregarCuerpoEstatico(generador);
+                //this.espacio.agregarCuerpoEstatico(generador);
                 this.generadores.push(generador);
 
                 var bloque = new Bloque(imagenes.bloque_tierra, x,y, false);
